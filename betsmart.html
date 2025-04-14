@@ -1,5 +1,38 @@
 <html>
     <head>
         <title>Bet Smart</title>
+        <link rel="stylesheet" href="betsmart.css" />
     </head>
+
+    <body>
+        <!-- Title and Header Sectio-->
+        <header>
+            <h1>Bet Smart</h1>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Help</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class = "search-area">
+                <label for = "sportSelect">Choose a Sport:</label>
+                <select id = "sportSelect">
+                    <option value = "">Select</option>
+                    <option value = "nba">NFL</option>
+                    <option value = "nba">NBA</option>
+                    <option value = "nba">MLB</option>
+                    <option value = "nba">NHL</option>
+                </select>
+
+                <label for = "teamSearch">Search Team/Player</label>
+                <input type = "text" id = "teamSearch" placeholder="e.g. Lakers, Mahomes" />
+
+                <button onclick="searchOdds()">Search Odds</button>
+            </section>
+
+        </main>
+
+    </body>
 </html>

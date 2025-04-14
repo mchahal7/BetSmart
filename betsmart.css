@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 10;
+    padding: 10;
+}
+
+header {
+    background: lightblue;
+    color: black;
+    padding: 1rem; /* 1rem = 16px */ 
+}
+
+nav a {
+    margin-right: 1rem;
+    color: black;
+    text-decoration: none;
+}
+
+.search-area {
+    padding: 2rem;
+}
+
+  label {
+    display: block;
+    margin-top: 1rem;
+}
+
+input, select, button {
+    padding: 8px;
+    margin-top: 4px;
+    width: 100%;
+    max-width: 300px;
+    margin-right: 10px;
+}
+
+.results {
+    padding: 1rem 2rem; /* Top & bottom: 16px, Left & right: 32px */
+    background: #f9f9f9;
+    min-height: 200px;
+  }

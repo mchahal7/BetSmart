@@ -1,47 +1,32 @@
-<html>
-    <head>
-        <title>Bet Smart</title>
-        <link rel="stylesheet" href="betsmart.css" />
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bet Smart - Home</title>
+  <link rel="stylesheet" href="betsmart.css" />
 
-    <body>
-        <!-- Title and Header Sectio-->
-        <header>
-            <h1>BetSmart</h1>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Help</a>
-            </nav>
-        </header>
+  <!-- Chart.js for future odds visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Toastify for notifications -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Bet Smart</h1>
+    
+    <label for="sport-select">Select a Sport:</label>
+    <select id="sport-select">
+      <option value="">Loading sports...</option>
+    </select>
 
-        <main>
-            <section class = "search-area">
-                <label for = "sportSelect">Choose a Sport:</label>
-                <select id = "sportSelect">
-                    <option value = "">Select</option>
-                    <option value = "nfl">NFL</option>
-                    <option value = "nba">NBA</option>
-                    <option value = "mlb">MLB</option>
-                    <option value = "nhl">NHL</option>
-                </select>
+    <label for="team-search">Search for a Team (optional):</label>
+    <input type="text" id="team-search" placeholder="Type team name..." />
 
-                <label for = "teamSearch">Search Team/Player</label>
-                <input type = "text" id = "teamSearch" placeholder="e.g. Lakers, Mahomes" />
+    <button id="view-matches">View Daily Matches</button>
+  </div>
 
-                <button onclick="searchOdds()">Search Odds</button>
-            </section>
-
-             <section class = "results" id = "results">
-                <!-- Odds results will show here-->
-             </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2025 Bet Smart</p>
-          </footer>
-        
-          <script src="script.js"></script>
-
-    </body>
+  <script src="script.js"></script>
+</body>
 </html>

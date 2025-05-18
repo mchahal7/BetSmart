@@ -1,101 +1,124 @@
-const API_HOST = 'therundown-therundown-v1.p.rapidapi.com';
-const API_KEY = 'eac111f617mshf534f8af13041b4p1b1d70jsn40a2e68bbf09';
+const API_KEY = 'd7f4b5041779c118d7b49d9f09df1b95';
 
+// reads value passed from homepage
 const urlParams = new URLSearchParams(window.location.search);
-const sportId = urlParams.get('sportId');
+const sportKey = urlParams.get('sportKey');
 const sportName = urlParams.get('sportName') || 'Selected Sport';
 const teamFilter = (urlParams.get('team') || '').toLowerCase();
-const selectedDate = urlParams.get('date') || new Date().toISOString().split('T')[0];
 
 const matchesContainer = document.getElementById('matches-container');
 const sportNameElem = document.getElementById('sport-name');
-const dateElem = document.getElementById('date');
 const backHomeBtn = document.getElementById('back-home');
 
 sportNameElem.textContent = sportName;
-dateElem.textContent = `Matches for ${selectedDate}`;
 
 backHomeBtn.addEventListener('click', () => {
-  window.location.href = 'betsmart.html'; // changed from index.html to your home page name
+  window.location.href = 'betsmart.html';
 });
 
+// api to get today's matches and odds for the selected sport
 async function fetchMatches() {
   try {
-    const eventsUrl = `https://${API_HOST}/sports/events?sport_id=${sportId}&date=${selectedDate}`;
+    const response = await fetch(`https://api.the-odds-api.com/v4/sports/${sportKey}/odds/?regions=us&markets=h2h&apiKey=${API_KEY}`);
+    const matches = await response.json();
 
-    const response = await fetch(eventsUrl, {
-      headers: {
-        'x-rapidapi-host': API_HOST,
-        'x-rapidapi-key': API_KEY
-      }
-    });
-
-    const data = await response.json();
-
-    if (!data.events || data.events.length === 0) {
-      matchesContainer.innerHTML = '<p>No matches found for this date.</p>';
+    if (!matches || matches.length === 0) {
+      matchesContainer.innerHTML = '<p>No matches found.</p>';
       return;
     }
 
-    // Filter by team name if provided
-    const filteredEvents = teamFilter
-      ? data.events.filter(event =>
-          event.teams.away.name.toLowerCase().includes(teamFilter) ||
-          event.teams.home.name.toLowerCase().includes(teamFilter)
-        )
-      : data.events;
+    // filter matches to only those involving that team
+    const filteredMatches = teamFilter
+      ? matches.filter(match => {
+          return match.home_team.toLowerCase().includes(teamFilter) || match.away_team.toLowerCase().includes(teamFilter);
+        })
+      : matches;
 
-    if (filteredEvents.length === 0) {
-      matchesContainer.innerHTML = '<p>No matches found for the specified team on this date.</p>';
+    if (filteredMatches.length === 0) {
+      matchesContainer.innerHTML = '<p>No matches found for the specified team.</p>';
       return;
     }
 
     matchesContainer.innerHTML = '';
 
-    for (const event of filteredEvents) {
+    // creating cards for each match
+    filteredMatches.forEach(match => {
       const matchCard = document.createElement('div');
       matchCard.className = 'match-card';
 
-      const teams = `${event.teams.away.name} vs ${event.teams.home.name}`;
-      const startTime = new Date(event.event_time * 1000).toLocaleTimeString();
+      const teams = `${match.away_team} @al ${match.home_team}`;
+      const commenceTime = new Date(match.commence_time).toLocaleString();
 
       const matchInfo = document.createElement('h3');
-      matchInfo.textContent = `${teams} - ${startTime}`;
+      matchInfo.textContent = `${teams} - ${commenceTime}`;
       matchCard.appendChild(matchInfo);
 
       const oddsDiv = document.createElement('div');
       oddsDiv.className = 'odds-container';
 
-      const moneyline = event.odds?.moneyline;
+      // show odds from each bookmaker
+      match.bookmakers.forEach(bookmaker => {
+        const odds = bookmaker.markets.find(market => market.key === 'h2h');
+        if (odds) {
+          const oddsText = odds.outcomes.map(outcome => `${outcome.name}: ${outcome.price}`).join(', ');
+          const bookmakerP = document.createElement('p');
+          bookmakerP.innerHTML = `<strong>${bookmaker.title}</strong>: ${oddsText}`;
+          oddsDiv.appendChild(bookmakerP);
+        }
+      });
 
-      if (moneyline) {
-        // If available, show the sportsbook site nicely
-        const sportsbook = event.sites && event.sites.length > 0 ? event.sites[0].site_nice : 'N/A';
-
-        const homeOdds = moneyline.home;
-        const awayOdds = moneyline.away;
-        const drawOdds = moneyline.draw;
-
-        const oddsText = document.createElement('p');
-        oddsText.innerHTML = `<strong>${sportsbook}</strong>: Home ${homeOdds}, Away ${awayOdds}${drawOdds ? ', Draw ' + drawOdds : ''}`;
-        oddsDiv.appendChild(oddsText);
-      } else {
-        oddsDiv.textContent = 'No odds available';
-      }
-
+      matchCard.appendChild(matchInfo);
       matchCard.appendChild(oddsDiv);
+      // code for chart.js
+      const chartCanvas = document.createElement('canvas');
+      chartCanvas.width = 400;
+      chartCanvas.height = 200;
+      matchCard.appendChild(chartCanvas);
+
+      const labels = [];
+      const data = [];
+      match.bookmakers.forEach(bookmaker => {
+        const h2h = bookmaker.markets.find(market => market.key === 'h2h');
+        if (h2h && h2h.outcomes.length >= 2) {
+          labels.push(bookmaker.title);
+          const avgPrice = h2h.outcomes.reduce((sum, outcome) => sum + outcome.price, 0) / h2h.outcomes.length;
+          data.push(avgPrice.toFixed(2));
+        }
+      });
+      
+      // Render Chart.js bar chart
+      new Chart(chartCanvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Average Odds',
+            data,
+            backgroundColor: 'rgba(0, 123, 255, 0.6)',
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
       matchesContainer.appendChild(matchCard);
-    }
+    });
+
   } catch (error) {
     console.error('Error fetching matches:', error);
-    Toastify({
-      text: "Failed to load matches. Please try again later.",
-      duration: 3000,
-      gravity: "top",
-      position: "center",
-      backgroundColor: "#e74c3c",
-    }).showToast();
+    alert('Failed to load matches. Please try again later.');
   }
 }
 
+if (annyang) {
+    const commands = {
+      'go back': () => window.location.href = 'betsmart.html',
+      'go to about': () => window.location.href = 'about.html'
+    };
+  
+    annyang.addCommands(commands);
+  }
+  
 fetchMatches();

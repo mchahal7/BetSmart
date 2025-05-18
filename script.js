@@ -1,72 +1,57 @@
-console.log('Script loaded');
-console.log('Fetching sports...');
+const API_KEY = 'd7f4b5041779c118d7b49d9f09df1b95';
 
 const sportSelect = document.getElementById('sport-select');
 const viewMatchesBtn = document.getElementById('view-matches');
 const teamSearch = document.getElementById('team-search');
 
-const API_HOST = 'therundown-therundown-v1.p.rapidapi.com';
-const API_KEY = 'eac111f617mshf534f8af13041b4p1b1d70jsn40a2e68bbf09';
-
-// Fetch and populate sports dropdown
 async function fetchSports() {
   try {
-    const response = await fetch('https://therundown-therundown-v1.p.rapidapi.com/sports', {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-host': API_HOST,
-        'x-rapidapi-key': API_KEY,
-      }
-    });
-    const data = await response.json();
+    const response = await fetch(`https://api.the-odds-api.com/v4/sports?apiKey=${API_KEY}`);
+    const sports = await response.json();
 
+    // this empties the dropdown and fills it with options
     sportSelect.innerHTML = '<option value="">-- Select a Sport --</option>';
-    data.sports.forEach(sport => {
+    sports.forEach(sport => {
       const option = document.createElement('option');
-      option.value = sport.sport_id;
-      option.textContent = sport.sport_name;
+      option.value = sport.key; // use sport key for fetching odds later
+      option.textContent = sport.title;
       sportSelect.appendChild(option);
     });
   } catch (error) {
-    console.error('Error fetching sports:', error);
-    Toastify({
-      text: "Failed to load sports. Please try again later.",
-      duration: 3000,
-      gravity: "top",
-      position: "center",
-      backgroundColor: "#e74c3c",
-    }).showToast();
+    console.error('Failed to fetch sports:', error);
+    alert('Failed to load sports. Please try again later.');
   }
 }
 
-// Redirect to daily matches page with query params
 viewMatchesBtn.addEventListener('click', () => {
-  const selectedSportId = sportSelect.value;
+  const selectedSportKey = sportSelect.value;
   const teamQuery = teamSearch.value.trim();
 
-  if (!selectedSportId) {
-    Toastify({
-      text: "Please select a sport first.",
-      duration: 2000,
-      gravity: "top",
-      position: "center",
-      backgroundColor: "#f39c12",
-    }).showToast();
+  if (!selectedSportKey) {
+    alert('Please select a sport first.');
     return;
   }
 
+  // takes you to the next page (daily-matches.html)
   const sportName = sportSelect.options[sportSelect.selectedIndex].text;
-
-  // Pass team query optionally and default date to today (can be changed later)
-  const params = new URLSearchParams({
-    sportId: selectedSportId,
-    sportName: sportName,
-    team: teamQuery,
-    date: new Date().toISOString().split('T')[0] // YYYY-MM-DD
-  });
-
-  window.location.href = `daily-matches.html?${params.toString()}`;
+  window.location.href = `daily-matches.html?sportKey=${selectedSportKey}&sportName=${encodeURIComponent(sportName)}&team=${encodeURIComponent(teamQuery)}`;
 });
 
-// Initialize dropdown on page load
+if (annyang) {
+  const commands = {
+    'view matches': () => document.getElementById('view-matches').click(),
+    'go to about': () => window.location.href = 'about.html',
+    'search for *team': team => {
+      document.getElementById('team-search').value = team;
+    },
+    'select sport *sport': sport => {
+      const options = Array.from(document.getElementById('sport-select').options);
+      const match = options.find(o => o.text.toLowerCase().includes(sport.toLowerCase()));
+      if (match) sportSelect.value = match.value;
+    }
+  };
+
+  annyang.addCommands(commands);
+}
+
 fetchSports();

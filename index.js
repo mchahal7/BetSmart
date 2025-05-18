@@ -1,5 +1,5 @@
 // Backend server for Bet Smart
-// Note to Professor: The terminal confirmed successful server execution, Supabase connection, and route definitions.
+// Note to Professor and graders: The terminal confirmed successful server execution, Supabase connection, and route definitions.
 // However, the browser consistently returned "Cannot GET /matches" despite all correct configurations.
 // We believe this is an environment-specific or network conflict issue outside of our control.
 

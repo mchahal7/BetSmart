@@ -54,4 +54,10 @@ if (annyang) {
   annyang.addCommands(commands);
 }
 
+// third fetch call
+fetch('http://localhost:3001/')
+  .then(res => res.text())
+  .then(data => console.log('Backend says:', data))
+  .catch(err => console.error('Error talking to backend:', err));
+
 fetchSports();

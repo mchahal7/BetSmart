@@ -17,6 +17,7 @@ backHomeBtn.addEventListener('click', () => {
 });
 
 // api to get today's matches and odds for the selected sport
+// second fetch call
 async function fetchMatches() {
   try {
     const response = await fetch(`https://api.the-odds-api.com/v4/sports/${sportKey}/odds/?regions=us&markets=h2h&apiKey=${API_KEY}`);

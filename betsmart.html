@@ -1,16 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bet Smart - Home</title>
   <link rel="stylesheet" href="betsmart.css" />
-
-  <!-- Chart.js for future odds visualization -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Toastify for notifications -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body>
   <div class="container">
@@ -25,8 +18,29 @@
     <input type="text" id="team-search" placeholder="Type team name..." />
 
     <button id="view-matches">View Daily Matches</button>
-  </div>
 
+    <button onclick="window.location.href='about.html'">About This Project</button>
+  </div>
+  <!-- adding voice commands -->
+  <div class="voice-command-box">
+    <h2> Voice Control Instructions</h2>
+    <p>Use the following voice commands to control the site:</p>
+    <ul>
+      <li><strong>"View matches"</strong> - Clicks the View Matches button</li>
+      <li><strong>"Go to About"</strong> - Opens the About page</li>
+      <li><strong>"Search for [team name]"</strong> - Enters the team name in the search bar</li>
+    </ul>
+  
+    <div class="voice-buttons">
+      <button onclick="annyang.start()">🔊 Turn Voice ON</button>
+      <button onclick="annyang.abort()">🔇 Turn Voice OFF</button>
+    </div>
+  </div>
+  
+
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

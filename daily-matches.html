@@ -5,12 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bet Smart - Daily Matches</title>
   <link rel="stylesheet" href="betsmart.css" />
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Toastify -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src ="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
@@ -18,10 +13,14 @@
     <button id="back-home">Back to Home</button>
 
     <h2 id="sport-name"></h2>
-    <p id="date"></p>
-
     <div id="matches-container"></div>
+
+    <button onclick="window.location.href='about.html'">About</button>
   </div>
+
+<!-- adding voice commands using Annyang.js-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+  <script src="voice.js"></script>
 
   <script src="daily-matches.js"></script>
 </body>

@@ -6,7 +6,7 @@ if (annyang) {
       },
       'navigate to :page': page => {
         const pageMap = {
-          'home': 'betsmart.html',
+          'home': 'index.html',
           'about': 'about.html',
           'matches': 'daily-matches.html?sportKey=soccer_epl&sportName=Soccer%20EPL'
         };

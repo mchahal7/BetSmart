@@ -13,7 +13,7 @@ const backHomeBtn = document.getElementById('back-home');
 sportNameElem.textContent = sportName;
 
 backHomeBtn.addEventListener('click', () => {
-  window.location.href = 'betsmart.html';
+  window.location.href = 'index.html';
 });
 
 // api to get today's matches and odds for the selected sport
@@ -115,7 +115,7 @@ async function fetchMatches() {
 
 if (annyang) {
     const commands = {
-      'go back': () => window.location.href = 'betsmart.html',
+      'go back': () => window.location.href = 'index.html',
       'go to about': () => window.location.href = 'about.html'
     };
   

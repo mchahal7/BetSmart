@@ -4,6 +4,7 @@ const sportSelect = document.getElementById('sport-select');
 const viewMatchesBtn = document.getElementById('view-matches');
 const teamSearch = document.getElementById('team-search');
 
+// first fetch call
 async function fetchSports() {
   try {
     const response = await fetch(`https://api.the-odds-api.com/v4/sports?apiKey=${API_KEY}`);

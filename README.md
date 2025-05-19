@@ -1,6 +1,8 @@
-Perfect. Here's a clean, professional, and natural-sounding `README.md` file for your Bet Smart project:
-
 ---
+## Live Demo
+
+View the deployed project here:  
+[https://bet-smart-nine.vercel.app](https://bet-smart-nine.vercel.app)
 
 ## Bet Smart
 
